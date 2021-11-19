@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="insertAd">
+		INSERT
+		INTO AD
+		(
+		AD_NO
+		, AD_TITLE
+		, AD_WRITER
+		, AD_DATE
+		, AD_CONTENT
+		, AD_COMPANY
+		, AD_PHONE
+		, READ
+		, STATUS
+		)
+		VALUES
+		(
+		SEQ_AD_NO.NEXTVAL
+		, ?
+		, ?
+		, SYSDATE
+		, ?
+		, ?
+		, ?
+		, DEFAULT
+		, DEFAULT
+		)
+
+	</entry>
+	<entry key="getListCount">
+		SELECT
+		COUNT(*)
+		FROM AD
+		WHERE STATUS = 'N'
+	</entry>
+
+	<entry key="selectList">
+		SELECT *
+		FROM (SELECT ROWNUM RNUM, A.*
+		FROM (SELECT
+		AD_NO
+		, AD_TITLE
+		, AD_WRITER
+		, AD_DATE
+		, AD_CONTENT
+		, AD_COMPANY
+		, AD_PHONE
+		, READ
+		, STATUS
+		FROM AD
+		WHERE STATUS ='N'
+		ORDER BY AD_NO DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+	<entry key="increaseRead">
+		UPDATE AD
+		SET READ = 'Y'
+		WHERE AD_NO = ?
+	</entry>
+	<entry key="selectAd">
+		SELECT
+		AD_NO
+		, AD_TITLE
+		, AD_WRITER
+		, AD_DATE
+		, AD_CONTENT
+		, AD_COMPANY
+		, AD_PHONE
+		, READ
+		, STATUS
+		FROM AD
+		WHERE STATUS ='N'
+		AND AD_NO = ?
+	</entry>
+
+</properties>

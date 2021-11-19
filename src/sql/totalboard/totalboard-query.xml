@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="getListCount">
+		SELECT
+			   COUNT(*)
+		  FROM BOARD
+		 WHERE STATUS = 'N'
+	</entry>
+	
+	<entry key="getSearchListCount">
+		SELECT
+		       COUNT(*)
+		  FROM BOARD
+		 WHERE STATUS = 'N'
+		   AND (BTITLE LIKE '%' || ? || '%')
+	</entry>
+	
+	<entry key="selectList">
+ 		SELECT *
+		FROM (SELECT ROWNUM RNUM, A.*
+		FROM (SELECT
+		        BID
+		      , BTYPE
+		      , BTITLE
+		      , NICKNAME
+		      , BCOUNT
+		      , B.STATUS
+		   FROM BOARD B
+		   JOIN MEMBER ON(BWRITER = USER_NO)
+		  WHERE B.STATUS = 'N'
+		  ORDER BY BID DESC) A)
+		  WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectSearchList">
+		SELECT *
+		FROM (SELECT ROWNUM RNUM, A.*
+		FROM (SELECT
+		        BID
+		      , BTYPE
+		      , BTITLE
+		      , NICKNAME
+		      , BCOUNT
+		      , B.STATUS
+		   FROM BOARD B
+		   JOIN MEMBER ON(BWRITER = USER_NO)
+		  WHERE B.STATUS = 'N'
+		    AND (BTITLE LIKE '%' || ? || '%')
+		  ORDER BY BID DESC) A)
+		  WHERE RNUM BETWEEN ? AND ?
+	</entry>
+</properties>

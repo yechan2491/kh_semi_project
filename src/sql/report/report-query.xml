@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="boardReport">
+INSERT INTO REPORT VALUES(SEQ_RID.NEXTVAL,?,?,SYSDATE,?,DEFAULT,?)
+</entry>
+<entry key="ridSortBid">
+INSERT INTO BOARD_REPORT VALUES(?,SEQ_RID.CURRVAL)
+</entry>
+<entry key="getListCount">
+   SELECT
+          COUNT(*)
+     FROM REPORT
+</entry>
+<!-- <entry key="selectList">
+SELECT *
+FROM (SELECT ROWNUM RNUM, A.*
+FROM (SELECT 
+        RID
+       ,RTITLE
+       ,RCONTENT
+       ,REPORT_DATE
+       ,WRITER
+       ,STATUS
+    FROM REPORT
+    WHERE STATUS ='N'
+    ORDER BY RID DESC) A)
+WHERE RNUM BETWEEN ? AND ?
+	</entry> -->
+<entry key="selectList">
+SELECT *
+FROM (SELECT ROWNUM RNUM, A.*
+FROM (SELECT 
+        RID
+       ,RTITLE
+       ,RCONTENT
+       ,REPORT_DATE
+       ,NICKNAME
+       ,REPORT.STATUS
+    FROM REPORT
+    JOIN MEMBER ON(RWRITER = USER_NO) 
+    ORDER BY RID DESC) A)
+WHERE RNUM BETWEEN ? AND ?
+</entry>
+<entry key="reportDetail">
+   SELECT 
+		  RID
+		, RTITLE
+		, RCONTENT
+		, REPORT_DATE
+        , M.nickname AS BWRITER
+        , M2.NICKNAME AS REPORTER
+        , R.WRITER AS WRITER
+		, R.RWRITER  AS RWRITER
+        , B1.BID AS REPLYBID
+        , B2.BID AS BOARDBID
+        , aid
+        , b1.btype AS REPLYBTYPE
+        , b2.btype AS BOARDBTYPE
+        , acontent AS REPLYREASON
+        , b2.bcontent AS BOARDREASON
+	FROM REPORT R 
+    JOIN MEMBER M ON(R.WRITER=M.USER_NO)
+	JOIN MEMBER M2 ON(R.RWRITER=M2.USER_NO)
+    left JOIN ANSWER_REPORT AR USING(RID)
+    left JOIN ANSWER A USING(AID)
+    left JOIN BOARD B1 ON(B1.BID = a.BID)
+    left JOIN BOARD_REPORT BR USING(RID)
+    left JOIN BOARD B2 ON(B2.BID = br.BID)
+    WHERE RID = ?
+</entry>
+<entry key="increaseRead">
+ UPDATE REPORT
+         SET STATUS = 'Y'
+       WHERE RID = ?
+</entry>
+<entry key="replyReport">
+INSERT INTO REPORT VALUES(SEQ_RID.NEXTVAL,?,?,SYSDATE,?,DEFAULT,?)
+</entry>
+<entry key="ridSortAid">
+INSERT INTO ANSWER_REPORT VALUES(?,SEQ_RID.CURRVAL)
+</entry>
+
+<entry key="noteReport">
+INSERT INTO REPORT VALUES(SEQ_RID.NEXTVAL,?,?,SYSDATE,?,DEFAULT,?)
+</entry>
+<entry key="ridSortNno">
+INSERT INTO NOTE_REPORT VALUES(?,SEQ_RID.CURRVAL)
+</entry>
+
+<entry key="reportNoteDetail">
+	SELECT
+       RTITLE
+     , RWRITER_NICK
+     , REPORT_DATE
+     , RCONTENT
+     , NCONTENT 
+     , NICKNAME WRITER_NICK
+     , USER_NO
+     , NNO
+     , RWRITER
+  FROM(
+SELECT
+       RTITLE
+     , NNO
+     , NICKNAME RWRITER_NICK
+     , REPORT_DATE
+     , RCONTENT
+     , NCONTENT
+     , WRITER
+     , RWRITER
+  FROM REPORT
+  JOIN MEMBER ON(RWRITER=USER_NO)
+  JOIN NOTE_REPORT USING(RID)
+  JOIN NOTE USING(NNO)
+ WHERE RID= ? )
+  JOIN MEMBER ON(WRITER=USER_NO)
+</entry>
+
+</properties>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="selectInfo">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, FILE_PATH
+		, CHANGE_NAME
+		, PROFILE_PATH
+		, NICKNAME
+		FROM BOARD B
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		WHERE BTYPE = 1
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL = 0
+        AND (SYSDATE - CREATE_DATE) BETWEEN 0 AND 3
+		ORDER BY B.BCOUNT DESC) A
+        WHERE ROWNUM BETWEEN 0 AND 4)
+	</entry>
+	
+	<entry key="selectMarket">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, FILE_PATH
+		, CHANGE_NAME
+		, PROFILE_PATH
+		, NICKNAME
+		FROM BOARD B
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		WHERE BTYPE = 2
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL = 0
+        AND (SYSDATE - CREATE_DATE) BETWEEN 0 AND 3
+		ORDER BY B.BCOUNT DESC) A
+        WHERE ROWNUM BETWEEN 0 AND 4)
+	</entry>
+	
+	<entry key="selectToday">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, FILE_PATH
+		, CHANGE_NAME
+        , CREATE_DATE
+        , BTYPE
+		, PROFILE_PATH
+		, NICKNAME
+		FROM BOARD B
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		WHERE B.STATUS = 'N'
+		AND FILE_LEVEL = 0
+        AND CREATE_DATE - TO_DATE(TO_CHAR(SYSDATE ,'yyyy/mm/dd')) BETWEEN 0 AND 1
+		ORDER BY B.BCOUNT DESC) A
+        WHERE ROWNUM BETWEEN 0 AND 1)
+	</entry>
+</properties>

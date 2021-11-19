@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+	<entry key="selectMarketplaceList">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, PRICE
+		, CNAME
+		, B.MODIFY_DATE
+		, FILE_PATH
+		, CHANGE_NAME
+		, NICKNAME
+        , PROFILE_PATH
+		FROM BOARD B
+		JOIN CATEGORY USING(CID)
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		JOIN MARKETPLACE USING(BID)
+		WHERE BTYPE =2
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL=0
+		ORDER BY B.MODIFY_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+	<!-- 최신순 (전체리스트) -->
+	<entry key="selectMarketplacerecentAllList">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, PRICE
+		, CNAME
+		, CREATE_DATE
+		, B.MODIFY_DATE
+		, FILE_PATH
+		, CHANGE_NAME
+		, NICKNAME
+        , PROFILE_PATH
+		FROM BOARD B
+		JOIN CATEGORY USING(CID)
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		JOIN MARKETPLACE USING(BID)
+		WHERE BTYPE =2
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL=0
+		ORDER BY B.MODIFY_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+	<!-- 오래된순 (전체리스트) -->
+	<entry key="selectMarketplaceoldAllList">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, PRICE
+		, CNAME
+		, CREATE_DATE
+		, B.MODIFY_DATE
+		, FILE_PATH
+		, CHANGE_NAME
+		, NICKNAME
+        , PROFILE_PATH
+		FROM BOARD B
+		JOIN CATEGORY USING(CID)
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		JOIN MARKETPLACE USING(BID)
+		WHERE BTYPE =2
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL=0
+		ORDER BY B.MODIFY_DATE ASC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+	<!-- 가격낮은순 (전체리스트) -->
+	<entry key="selectMarketplacepriceAscAllList">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, PRICE
+		, CNAME
+		, CREATE_DATE
+		, B.MODIFY_DATE
+		, FILE_PATH
+		, CHANGE_NAME
+		, NICKNAME
+        , PROFILE_PATH
+		FROM BOARD B
+		JOIN CATEGORY USING(CID)
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		JOIN MARKETPLACE USING(BID)
+		WHERE BTYPE =2
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL=0
+		ORDER BY PRICE ASC, B.MODIFY_DATE) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+	<!-- 가격높은순 (전체리스트) -->
+	<entry key="selectMarketplacepriceDescAllList">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, PRICE
+		, CNAME
+		, CREATE_DATE
+		, B.MODIFY_DATE
+		, FILE_PATH
+		, CHANGE_NAME
+		, NICKNAME
+        , PROFILE_PATH
+		FROM BOARD B
+		JOIN CATEGORY USING(CID)
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		JOIN MARKETPLACE USING(BID)
+		WHERE BTYPE =2
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL=0
+		ORDER BY PRICE DESC, B.MODIFY_DATE) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+
+	<!-- 최신순 (카테고리) -->
+	<entry key="selectMarketplacerecentList">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, PRICE
+		, CNAME
+		, CREATE_DATE
+		, B.MODIFY_DATE
+		, FILE_PATH
+		, CHANGE_NAME
+		, NICKNAME
+        , PROFILE_PATH
+		FROM BOARD B
+		JOIN CATEGORY USING(CID)
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		JOIN MARKETPLACE USING(BID)
+		WHERE BTYPE =2
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL=0
+		AND CID = ?
+		ORDER BY B.MODIFY_DATE DESC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+	<!-- 오래된순 (카테고리) -->
+	<entry key="selectMarketplaceoldList">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, PRICE
+		, CNAME
+		, CREATE_DATE
+		, B.MODIFY_DATE
+		, FILE_PATH
+		, CHANGE_NAME
+		, NICKNAME
+        , PROFILE_PATH
+		FROM BOARD B
+		JOIN CATEGORY USING(CID)
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		JOIN MARKETPLACE USING(BID)
+		WHERE BTYPE =2
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL=0
+		AND CID = ?
+		ORDER BY B.MODIFY_DATE ASC) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+	<!-- 가격낮은순 (카테고리) -->
+	<entry key="selectMarketplacepriceAscList">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, PRICE
+		, CNAME
+		, CREATE_DATE
+		, B.MODIFY_DATE
+		, FILE_PATH
+		, CHANGE_NAME
+		, NICKNAME
+        , PROFILE_PATH
+		FROM BOARD B
+		JOIN CATEGORY USING(CID)
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		JOIN MARKETPLACE USING(BID)
+		WHERE BTYPE =2
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL=0
+		AND CID = ?
+		ORDER BY PRICE ASC, B.MODIFY_DATE) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+	<!-- 가격높은순 (카테고리) -->
+	<entry key="selectMarketplacepriceDescList">
+		SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, PRICE
+		, CNAME
+		, CREATE_DATE
+		, B.MODIFY_DATE
+		, FILE_PATH
+		, CHANGE_NAME
+		, NICKNAME
+        , PROFILE_PATH
+		FROM BOARD B
+		JOIN CATEGORY USING(CID)
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		JOIN MARKETPLACE USING(BID)
+		WHERE BTYPE =2
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL=0
+		AND CID = ?
+		ORDER BY PRICE DESC, B.MODIFY_DATE) A)
+		WHERE RNUM BETWEEN ? AND ?
+	</entry>
+
+
+	<entry key="getListCount">
+		SELECT
+		COUNT(*)
+		FROM BOARD
+		WHERE BTYPE = 2
+		AND STATUS ='N'
+	</entry>
+
+	<entry key="getCategoryListCount">
+		SELECT
+		COUNT(*)
+		FROM BOARD
+		WHERE BTYPE = 2
+		AND STATUS ='N'
+		AND CID = ?
+	</entry>
+
+	<entry key="insertBoard">
+		INSERT
+		INTO BOARD
+		(
+		BID
+		, BTITLE
+		, BCONTENT
+		, CREATE_DATE
+		, MODIFY_DATE
+		, BCOUNT
+		, STATUS
+		, BTYPE
+		, BWRITER
+		, CID
+		)
+		VALUES
+		(
+		SEQ_BID.NEXTVAL
+		, ?
+		, ?
+		, SYSDATE
+		, SYSDATE
+		, 0
+		, DEFAULT
+		, ?
+		, ?
+		, ?
+		)
+	</entry>
+
+	<entry key="insertImage">
+		INSERT
+		INTO IMAGE
+		(
+		IID
+		, BID
+		, ORIGIN_NAME
+		, FILE_PATH
+		, CHANGE_NAME
+		, FILE_LEVEL
+		, STATUS
+		)
+		VALUES
+		(
+		SEQ_IID.NEXTVAL
+		, SEQ_BID.CURRVAL
+		, ?
+		, ?
+		, ?
+		, ?
+		, DEFAULT
+		)
+
+	</entry>
+
+	<entry key="insertMarketplace">
+		INSERT
+		INTO MARKETPLACE
+		(
+		MID
+		, PRICE
+		, CONDITION
+		, LOCATION
+		, BID
+		)
+		VALUES
+		(
+		SEQ_MID.NEXTVAL
+		, ?
+		, ?
+		, ?
+		, SEQ_BID.CURRVAL
+		)
+	</entry>
+
+
+	<entry key="increaseCount">
+		UPDATE BOARD
+		SET BCOUNT = BCOUNT+1
+		WHERE BID= ?
+	</entry>
+
+
+
+	<entry key="selectMarketplace">
+		SELECT
+	
+		 CID
+		, MID
+		, PRICE
+		, BCOUNT
+		, CNAME
+		, B.MODIFY_DATE
+		, USER_NAME
+		, CREATE_DATE
+		, CONDITION
+		, LOCATION
+		, NICKNAME
+		, BTITLE
+		, BCONTENT
+		, BWRITER
+		, PROFILE_PATH
+		FROM BOARD B
+		JOIN
+		CATEGORY USING(CID)
+		JOIN MEMBER ON (BWRITER = USER_NO)
+		JOIN MARKETPLACE USING(BID)
+		WHERE B.STATUS = 'N'
+		AND BID = ?
+	</entry>
+
+
+	<entry key="getLikeCount">
+		SELECT
+		COUNT(*)
+		FROM MY_LIST_BOARD
+		WHERE MID= ?
+
+	</entry>
+
+
+	<entry key="selectPhotoList">
+		SELECT
+		IID
+		, ORIGIN_NAME
+		, CHANGE_NAME
+		, FILE_PATH
+		, FILE_LEVEL
+		FROM IMAGE
+		WHERE BID = ?
+		AND STATUS = 'N'
+		ORDER BY IID
+	</entry>
+
+
+	<entry key="deleteBoard">
+		UPDATE BOARD
+		SET
+		STATUS = 'Y'
+		WHERE BID = ?
+	</entry>
+
+	<!-- <entry key="deleteMarketplace"> UPDATE MARKETPLACE SET STATUS = 'Y' 
+		WHERE BID = ? </entry> -->
+
+
+<entry key="deleteImage">
+      UPDATE IMAGE
+      SET
+      STATUS = 'Y'
+      WHERE BID = ?
+        AND STATUS='N'
+   </entry>
+
+
+
+	<entry key="updateBoard">
+		UPDATE BOARD
+		SET
+		BTITLE = ?
+		, BCONTENT = ?
+		, MODIFY_DATE = SYSDATE
+		, CID = ?
+		WHERE BID= ?
+	</entry>
+
+	<entry key="updateMarketplace">
+		UPDATE MARKETPLACE
+		SET
+		PRICE = ?
+		, CONDITION = ?
+		, LOCATION = ?
+		WHERE BID= ?
+	</entry>
+
+
+	<entry key="updatePhoto">
+		UPDATE IMAGE
+		SET
+		ORIGIN_NAME = ?
+		, CHANGE_NAME = ?
+		WHERE CHANGE_NAME = ?
+
+	</entry>
+
+
+	<entry key="insertAddedPhoto">
+		INSERT
+		INTO IMAGE
+		(
+		IID
+		, BID
+		, ORIGIN_NAME
+		, FILE_PATH
+		, CHANGE_NAME
+		, FILE_LEVEL
+		, STATUS
+		)
+		VALUES
+		(
+		SEQ_IID.NEXTVAL
+		, ?
+		, ?
+		, ?
+		, ?
+		, ?
+		, DEFAULT
+		)
+	</entry>
+
+
+	<entry key="updateImage">
+		UPDATE IMAGE
+		SET
+		STATUS ='Y'
+		WHERE CHANGE_NAME = ?
+		AND BID = ?
+
+	</entry>
+
+
+
+	<entry key="insertReply">
+		INSERT
+		INTO ANSWER
+		(
+		AID
+		, ACONTENT
+		, CREATE_DATE
+		, MODIFY_DATE
+		, BID
+		, WRITER
+		, STATUS
+		, AID2
+		)
+		VALUES
+		(
+		SEQ_AID.NEXTVAL
+		, ?
+		, SYSDATE
+		, SYSDATE
+		, ?
+		, ?
+		, DEFAULT
+		, SEQ_AID.CURRVAL
+		)
+	</entry>
+
+
+	<entry key="selectReplyList">
+		SELECT
+		AID
+		, ACONTENT
+		, BID
+		, A.WRITER
+		, USER_NAME
+		, NICKNAME
+		, CREATE_DATE
+		, A.MODIFY_DATE
+		, A.STATUS
+		, PROFILE_PATH
+		FROM ANSWER A
+		JOIN MEMBER ON(WRITER=USER_NO)
+		WHERE A.STATUS ='N'
+		AND BID = ?
+		ORDER BY AID DESC
+
+	</entry>
+	
+	<entry key="selectReplyListReduce">
+			SELECT
+		        AID
+				, ACONTENT
+				, BID
+				, WRITER
+				, USER_NAME
+				, NICKNAME
+				, CREATE_DATE
+				, MODIFY_DATE
+				, STATUS
+				, PROFILE_PATH
+		  FROM(SELECT
+				  AID
+				, ACONTENT
+				, BID
+				, A.WRITER
+				, USER_NAME
+				, NICKNAME
+				, CREATE_DATE
+				, A.MODIFY_DATE
+				, A.STATUS
+				, PROFILE_PATH
+				FROM ANSWER A
+				JOIN MEMBER ON(WRITER=USER_NO)
+				WHERE A.STATUS ='N'
+				AND BID = ?
+				ORDER BY AID DESC)
+		  <![CDATA[WHERE ROWNUM<=4]]>
+		
+	
+	</entry>
+
+	<entry key="deleteReply">
+		UPDATE ANSWER
+		SET STATUS = 'Y'
+		WHERE BID= ?
+		AND AID= ?
+
+	</entry>
+
+
+	<entry key="selectRelationList">
+		SELECT
+		BID
+		, BTITLE
+		, BCONTENT
+		, CREATE_DATE
+		, MODIFY_DATE
+		, STATUS
+		, BTYPE
+		, CID
+		, CNAME
+		, CHANGE_NAME
+		, FILE_PATH
+		FROM(SELECT
+		BID
+		, BTITLE
+		, BCONTENT
+		, CREATE_DATE
+		, MODIFY_DATE
+		, B.STATUS
+		, BTYPE
+		, CID
+		, CNAME
+		, CHANGE_NAME
+		, FILE_PATH
+		FROM BOARD B
+		JOIN IMAGE USING(BID)
+		JOIN CATEGORY USING(CID)
+		WHERE CID = ?
+		AND BID != ?
+		AND FILE_LEVEL=0
+
+		AND B.STATUS='N'
+
+		ORDER BY MODIFY_DATE DESC)
+		 <![CDATA[WHERE ROWNUM<=4]]>
+
+
+	</entry>
+	<entry key="selectLikeBid">
+	SELECT BID
+FROM MY_LIST_BOARD
+LEFT JOIN MARKETPLACE USING(MID)
+WHERE USER_NO = ?
+AND BID = ?
+	</entry>
+</properties>
+
+
+
+

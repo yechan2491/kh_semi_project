@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+   <entry key="increaseCount">
+      UPDATE BOARD
+         SET BCOUNT = BCOUNT + 1
+       WHERE BID = ?  
+   </entry>
+
+
+
+
+   <entry key="insertBoard">
+      INSERT
+        INTO BOARD
+      (
+           BID
+        , BTITLE
+        , BCONTENT
+        , CREATE_DATE
+        , MODIFY_DATE
+        , BCOUNT
+        , STATUS
+        , BTYPE
+        , BWRITER
+        , CID
+      )  
+      VALUES
+      (
+           SEQ_BID.NEXTVAL
+         , ?
+         , ?
+         , SYSDATE
+            , SYSDATE
+         , DEFAULT
+         , DEFAULT
+         , ?
+         , ?
+         , ?
+      )
+   
+   </entry>   
+   
+   
+   <entry key="insertAttachment">
+      INSERT
+         INTO IMAGE
+         (
+           IID
+        , BID
+        , ORIGIN_NAME
+        , FILE_PATH
+        , CHANGE_NAME
+        , FILE_LEVEL
+        , STATUS
+        )
+          VALUES
+          (
+             SEQ_IID.NEXTVAL
+          , SEQ_BID.CURRVAL
+          , ?
+          , ?
+          , ?
+          , ?
+          ,   DEFAULT
+          )
+         
+   </entry>
+   
+   
+   <entry key="selectBoard">
+      SELECT
+          BID
+          , BTITLE
+          , BCONTENT
+          , CREATE_DATE
+          , B.MODIFY_DATE
+          , BCOUNT
+          , BWRITER
+        , CID        
+      , CNAME        
+        , USER_NAME       
+        , NICKNAME      
+      FROM BOARD B
+      JOIN CATEGORY USING(CID)
+      JOIN MEMBER ON (BWRITER = USER_NO)
+      WHERE B.STATUS = 'N'
+      AND BID = ?
+   </entry>   
+   
+   
+   <entry key="selectPhotoList">
+      SELECT
+            IID
+          , ORIGIN_NAME
+          , CHANGE_NAME
+          , FILE_PATH
+          , FILE_LEVEL
+        FROM IMAGE
+       WHERE BID = ?
+         AND STATUS = 'N'
+       ORDER BY IID
+   </entry>   
+   
+   
+   <entry key="updateBoard">
+      UPDATE BOARD
+      SET
+      BTITLE = ?
+      , BCONTENT = ?
+      , MODIFY_DATE = SYSDATE
+      , CID = ?
+      WHERE BID= ?
+   </entry>
+   
+<!--    <entry key="updateBoard">
+      UPDATE BOARD
+         SET BID = ?
+           , CID = ?
+           , BTITLE = ?
+           , BCONTENT = ?   
+           , MODIFY_DATE = SYSDATE
+             WHERE BID = ? 
+   
+   </entry> -->
+   
+   
+   <entry key="updatePhoto">
+      UPDATE IMAGE
+         SET ORIGIN_NAME = ?
+            , CHANGE_NAME = ?      
+       WHERE CHANGE_NAME = ?
+   </entry>
+   
+   <entry key="insertAddedPhoto">
+      INSERT
+         INTO IMAGE
+         (
+              IID
+            , BID
+            , ORIGIN_NAME
+            , FILE_PATH
+            , CHANGE_NAME
+            , FILE_LEVEL
+            , STATUS   
+         )
+         VALUES
+         (
+              SEQ_IID.NEXTVAL
+            , ?
+            , ?
+            , ?
+            , ?
+            , ?
+            , DEFAULT
+         )
+        
+   </entry>
+   
+   
+   <entry key="deleteBoard">
+      UPDATE BOARD
+         SET STATUS = 'Y'
+       WHERE BID = ?
+          
+   </entry>
+   
+   
+   <entry key="deletePhoto">
+      UPDATE IMAGE
+         SET STATUS = 'N'
+       WHERE BID = ?
+         
+   
+   </entry>
+   
+   
+   
+    <entry key="getLikeCount">
+      SELECT
+             COUNT(*)
+        FROM LIKE_BOARD
+        WHERE BID= ?
+   
+   </entry> 
+
+   
+   <entry key="getListCount">
+      SELECT
+      COUNT(*)
+      FROM BOARD
+      WHERE BTYPE = 1
+      AND STATUS ='N'
+   </entry>
+   
+   
+   <entry key="getCategoryListCount">
+      SELECT
+      COUNT(*)
+      FROM BOARD
+      WHERE BTYPE = 1
+      AND STATUS ='N'
+      AND CID = ?
+   </entry>
+   
+   
+   
+   
+      <!-- 최신순 (전체리스트)-->
+   <entry key="selectInformationAllList">
+        
+      SELECT *
+      FROM(SELECT ROWNUM RNUM, A.*
+      FROM(
+      SELECT
+      BID
+      , BTITLE
+      , CNAME
+      , CREATE_DATE
+      , B.MODIFY_DATE
+      , FILE_PATH
+      , CHANGE_NAME
+
+      FROM BOARD B
+      JOIN CATEGORY USING(CID)
+      JOIN MEMBER ON (BWRITER=USER_NO)
+      JOIN IMAGE USING(BID)
+      WHERE BTYPE =1
+      AND B.STATUS = 'N'
+      AND FILE_LEVEL=0
+      ORDER BY B.MODIFY_DATE DESC) A)
+      WHERE RNUM BETWEEN ? AND ?
+   </entry>
+   <!--       SELECT
+              BID
+            , CNAME
+            , BTITLE
+            , USER_NAME
+            , BCOUNT
+            , FILE_PATH
+            , CHANGE_NAME
+         FROM BOARD B
+         JOIN CATEGORY USING(CID)
+         JOIN MEMBER ON (BWRITER=USER_NO)
+         JOIN IMAGE USING(BID)
+        WHERE BTYPE = 1
+          AND B.STATUS = 'N'
+          AND FILE_LEVEL = 0
+        ORDER BY BID DESC -->
+   
+   
+   
+      <!-- 최신순 (카테고리) -->
+   <entry key="selectInformationList">
+      SELECT *
+      FROM(SELECT ROWNUM RNUM, A.*
+      FROM(
+      SELECT
+      BID
+      , BTITLE
+      , CNAME
+      , CREATE_DATE
+      , B.MODIFY_DATE
+      , FILE_PATH
+      , CHANGE_NAME
+
+      FROM BOARD B
+      JOIN CATEGORY USING(CID)
+      JOIN MEMBER ON (BWRITER=USER_NO)
+      JOIN IMAGE USING(BID)
+      WHERE BTYPE =1
+      AND B.STATUS = 'N'
+      AND FILE_LEVEL=0
+      AND CID = ?
+      ORDER BY B.MODIFY_DATE DESC) A)
+      WHERE RNUM BETWEEN ? AND ?
+   </entry>
+   
+   
+   
+   
+      <!-- 조회순 베스트4 -->
+<!--       <entry key="selectBestGalleryList">
+      SELECT
+              BID
+            , CNAME
+            , BTITLE
+            , USER_NAME
+            , BCOUNT
+            , FILE_PATH
+            , CHANGE_NAME
+         FROM BOARD B
+         JOIN CATEGORY USING(CID)
+         JOIN MEMBER ON (BWRITER=USER_NO)
+         JOIN IMAGE USING(BID)
+        WHERE BTYPE = 1
+          AND B.STATUS = 'N'
+          AND FILE_LEVEL = 0
+        ORDER BY BCOUNT, BID DESC
+        LIMIT 4
+   </entry>
+    -->
+    <!-- SELECT *
+         FROM(SELECT
+              BID
+            , CNAME
+            , BTITLE
+            , USER_NAME
+            , BCOUNT
+            , FILE_PATH
+            , CHANGE_NAME
+         FROM BOARD B
+         JOIN CATEGORY USING(CID)
+         JOIN MEMBER ON (BWRITER=USER_NO)
+         JOIN IMAGE USING(BID)
+        WHERE BTYPE = 1
+          AND B.STATUS = 'N'
+          AND FILE_LEVEL = 0 
+        ORDER BY BCOUNT DESC, BID DESC) 
+        <![CDATA[WHERE ROWNUM <= 4]]>  -->
+        
+        <!-- SELECT *
+		FROM(SELECT ROWNUM RNUM, A.*
+		FROM(
+		SELECT
+		BID
+		, BTITLE
+		, CNAME
+		, FILE_PATH
+		, CHANGE_NAME
+
+		FROM BOARD B
+		JOIN MEMBER ON (BWRITER=USER_NO)
+		JOIN IMAGE USING(BID)
+		WHERE BTYPE = 1
+		AND B.STATUS = 'N'
+		AND FILE_LEVEL = 0
+		ORDER BY B.BCOUNT DESC) A
+        WHERE ROWNUM BETWEEN 0 AND 4) -->
+        <!-- SELECT *
+		      FROM(SELECT ROWNUM RNUM, A.*
+		      FROM(
+		      SELECT
+		      BID
+		      , BTITLE
+		      , CNAME
+		      , CREATE_DATE
+		      , B.MODIFY_DATE
+		      , FILE_PATH
+		      , CHANGE_NAME
+		
+		      FROM BOARD B
+		      JOIN CATEGORY USING(CID)
+		      JOIN MEMBER ON (BWRITER=USER_NO)
+		      JOIN IMAGE USING(BID)
+		      WHERE BTYPE =1
+		      AND B.STATUS = 'N'
+		      AND FILE_LEVEL=0
+		      ORDER BY B.BCOUNT DESC) A)
+		      WHERE RNUM BETWEEN 1 AND 4  -->
+    <!-- 조회순 베스트4 -->
+          <entry key="selectBestGalleryList">  
+ 		      
+		SELECT *
+			FROM(SELECT ROWNUM RNUM, A.*
+			FROM(
+			SELECT
+			BID
+			, BTITLE
+			, CNAME
+			, FILE_PATH
+			, CHANGE_NAME
+	
+			FROM BOARD B
+			JOIN CATEGORY USING(CID)
+			JOIN MEMBER ON (BWRITER=USER_NO)
+			JOIN IMAGE USING(BID)
+			WHERE BTYPE = 1
+			AND B.STATUS = 'N'
+			AND FILE_LEVEL = 0
+			ORDER BY B.BCOUNT DESC) A
+	        WHERE ROWNUM BETWEEN 0 AND 4)
+        
+</entry>
+    
+   
+   
+   <entry key="insertReply">
+      INSERT
+      INTO ANSWER
+      (
+      AID
+      , ACONTENT
+      , CREATE_DATE
+      , MODIFY_DATE
+      , BID
+      , WRITER
+      , STATUS
+      , AID2
+      )
+      VALUES
+      (
+      SEQ_AID.NEXTVAL
+      , ?
+      , SYSDATE
+      , SYSDATE
+      , ?
+      , ?
+      , DEFAULT
+      , SEQ_AID.CURRVAL
+      )
+   </entry>
+   
+   
+   
+   
+   
+   
+   
+   
+   <entry key="selectReplyList">
+      SELECT
+      AID
+      , ACONTENT
+         , BID
+         , WRITER
+         , USER_NAME
+         , CREATE_DATE
+         , A.MODIFY_DATE
+         , A.STATUS
+         , NICKNAME
+      FROM ANSWER A
+      JOIN MEMBER ON(WRITER=USER_NO)
+      WHERE A.STATUS ='N'
+      AND BID = ?
+      ORDER BY AID DESC
+   </entry>
+   
+   
+   <entry key="deleteReply">
+      UPDATE ANSWER
+      SET STATUS = 'Y'
+      WHERE BID= ?
+      AND AID= ?
+
+   </entry>
+   
+
+
+
+
+
+
+
+</properties>

@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM
+"http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="getNoteReceiveListCount">
+		SELECT
+		COUNT(*)
+		FROM NOTE
+		WHERE RECEIVE_DELETE_STATUS ='N'
+		AND RECEIVE_ID = ?
+	</entry>	
+	
+	<entry key="getTitletNoteReceiveListCount">
+		SELECT
+		COUNT(*)
+		FROM NOTE
+		WHERE RECEIVE_DELETE_STATUS ='N'
+		AND NTITLE LIKE '%' || ? || '%'
+		AND RECEIVE_ID = ?
+	</entry>
+	
+	<entry key="getContentNoteReceiveListCount">
+		SELECT
+		COUNT(*)
+		FROM NOTE
+		WHERE RECEIVE_DELETE_STATUS ='N'
+		AND NCONTENT LIKE '%' || ? || '%'
+		AND RECEIVE_ID = ?
+	</entry>
+	
+	<entry key="getWritertNoteReceiveListCount">
+		SELECT
+			COUNT(*)
+     
+		FROM NOTE
+        JOIN MEMBER S ON(RECEIVE_ID = USER_NO )
+		WHERE RECEIVE_DELETE_STATUS ='N'
+		AND NICKNAME LIKE '%' || ? || '%'
+		AND RECEIVE_ID = ?
+        ORDER BY NNO DESC
+	</entry>
+	
+	
+	<entry key="selectNoteReceiveList">
+		SELECT
+		       *
+		  FROM(SELECT
+		       ROWNUM RNUM
+		     , N.*
+		  FROM(SELECT
+		       NNO
+		     , NTITLE
+		     , NCONTENT
+		     , SEND_DATE
+		     , RECEIVE_DELETE_STATUS
+		     , SEND_DELETE_STATUS
+		     , READ_CHECK
+		     , RECEIVE_ID
+		     , SEND_ID
+		     , NICKNAME
+		  FROM NOTE
+		  JOIN MEMBER ON(SEND_ID= USER_NO )
+		  WHERE RECEIVE_ID= ?
+		    AND RECEIVE_DELETE_STATUS ='N'
+		  ORDER BY NNO DESC) N)
+		  WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	
+	<entry key="selectNoteTitleReceiveList">
+		SELECT
+		       *
+		  FROM(SELECT
+		       ROWNUM RNUM
+		     , N.*
+		  FROM(SELECT
+		       NNO
+		     , NTITLE
+		     , NCONTENT
+		     , SEND_DATE
+		     , RECEIVE_DELETE_STATUS
+		     , SEND_DELETE_STATUS
+		     , READ_CHECK
+		     , RECEIVE_ID
+		     , SEND_ID
+		     , NICKNAME
+		  FROM NOTE
+		  JOIN MEMBER ON(SEND_ID= USER_NO )
+		  WHERE NTITLE LIKE '%' || ? || '%'
+		    AND RECEIVE_ID= ?
+		    AND RECEIVE_DELETE_STATUS ='N'
+		  ORDER BY NNO DESC) N)
+		  WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectNoteContentReceiveList">
+		SELECT
+		       *
+		  FROM(SELECT
+		       ROWNUM RNUM
+		     , N.*
+		  FROM(SELECT
+		       NNO
+		     , NTITLE
+		     , NCONTENT
+		     , SEND_DATE
+		     , RECEIVE_DELETE_STATUS
+		     , SEND_DELETE_STATUS
+		     , READ_CHECK
+		     , RECEIVE_ID
+		     , SEND_ID
+		     , NICKNAME
+		  FROM NOTE
+		  JOIN MEMBER ON(SEND_ID= USER_NO )
+		  WHERE NCONTENT LIKE '%' || ? || '%'
+		    AND RECEIVE_ID= ?
+		    AND RECEIVE_DELETE_STATUS ='N'
+		  ORDER BY NNO DESC) N)
+		  WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectNoteWriterReceiveList">
+		SELECT
+		       *
+		  FROM(SELECT
+		       ROWNUM RNUM
+		     , N.*
+		  FROM(SELECT
+		       NNO
+		     , NTITLE
+		     , NCONTENT
+		     , SEND_DATE
+		     , RECEIVE_DELETE_STATUS
+		     , SEND_DELETE_STATUS
+		     , READ_CHECK
+		     , RECEIVE_ID
+		     , SEND_ID
+		     , NICKNAME
+		  FROM NOTE
+		  JOIN MEMBER ON(SEND_ID= USER_NO )
+		  WHERE NICKNAME LIKE '%' || ? || '%'
+		    AND RECEIVE_ID= ?
+		    AND RECEIVE_DELETE_STATUS ='N'
+		  ORDER BY NNO DESC) N)
+		  WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<entry key="getNoteSendListCount">
+		SELECT
+		COUNT(*)
+		FROM NOTE
+		WHERE SEND_DELETE_STATUS ='N'
+		AND SEND_ID = ?
+	</entry>	
+	
+	<entry key="getTitletNoteSendListCount">
+		SELECT
+		COUNT(*)
+		FROM NOTE
+		WHERE SEND_DELETE_STATUS ='N'
+		AND NTITLE LIKE '%' || ? || '%'
+		AND SEND_ID = ?
+	</entry>
+	
+	<entry key="getContentNoteSendListCount">
+		SELECT
+		COUNT(*)
+		FROM NOTE
+		WHERE SEND_DELETE_STATUS ='N'
+		AND NCONTENT LIKE '%' || ? || '%'
+		AND SEND_ID = ?
+	</entry>
+	
+	<entry key="getWritertNoteSendListCount">
+		SELECT
+      COUNT(*)
+  FROM(SELECT
+        N.*
+      , NICKNAME SEND_NICKNAME
+		FROM NOTE N
+        JOIN MEMBER S ON(SEND_ID = USER_NO )
+		WHERE RECEIVE_DELETE_STATUS ='N'
+		AND NICKNAME LIKE '%' || ? || '%'
+		AND SEND_ID = ?
+        ORDER BY NNO DESC)
+   JOIN MEMBER ON(RECEIVE_ID=USER_NO)
+	</entry>
+	
+	
+	<entry key="selectNoteSendList">
+		SELECT
+       *
+  FROM(SELECT
+       ROWNUM RNUM
+     , N.*
+  FROM(SELECT 
+         NNO
+       , NTITLE
+       , NCONTENT
+       , SEND_DATE
+       , RECEIVE_DELETE_STATUS
+       , SEND_DELETE_STATUS
+       , READ_CHECK
+       , RECEIVE_ID
+       , SEND_ID
+       , NICKNAME
+  FROM(SELECT
+		       NNO
+		     , NTITLE
+		     , NCONTENT
+		     , SEND_DATE
+		     , RECEIVE_DELETE_STATUS
+		     , SEND_DELETE_STATUS
+		     , READ_CHECK
+		     , RECEIVE_ID
+		     , SEND_ID
+
+		  FROM NOTE
+		  JOIN MEMBER S ON(SEND_ID = USER_NO )
+		  WHERE SEND_ID= ?
+		    AND SEND_DELETE_STATUS ='N'
+		  ORDER BY NNO DESC)
+  JOIN MEMBER ON(RECEIVE_ID=USER_NO)) N)
+   WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	
+	<entry key="selectNoteTitleSendList">
+		SELECT
+       *
+  FROM(SELECT
+       ROWNUM RNUM
+     , N.*
+  FROM(SELECT 
+         NNO
+       , NTITLE
+       , NCONTENT
+       , SEND_DATE
+       , RECEIVE_DELETE_STATUS
+       , SEND_DELETE_STATUS
+       , READ_CHECK
+       , RECEIVE_ID
+       , SEND_ID
+       , NICKNAME
+  FROM(SELECT
+		       NNO
+		     , NTITLE
+		     , NCONTENT
+		     , SEND_DATE
+		     , RECEIVE_DELETE_STATUS
+		     , SEND_DELETE_STATUS
+		     , READ_CHECK
+		     , RECEIVE_ID
+		     , SEND_ID
+
+		  FROM NOTE
+		  JOIN MEMBER S ON(SEND_ID = USER_NO )
+		  WHERE NTITLE LIKE '%' || ? || '%'
+            AND SEND_ID= ?
+            AND SEND_DELETE_STATUS ='N'
+		  ORDER BY NNO DESC)
+  JOIN MEMBER ON(RECEIVE_ID=USER_NO)) N)
+   WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectNoteContentSendList">
+		SELECT
+       *
+  FROM(SELECT
+       ROWNUM RNUM
+     , N.*
+  FROM(SELECT 
+         NNO
+       , NTITLE
+       , NCONTENT
+       , SEND_DATE
+       , RECEIVE_DELETE_STATUS
+       , SEND_DELETE_STATUS
+       , READ_CHECK
+       , RECEIVE_ID
+       , SEND_ID
+       , NICKNAME
+  FROM(SELECT
+		       NNO
+		     , NTITLE
+		     , NCONTENT
+		     , SEND_DATE
+		     , RECEIVE_DELETE_STATUS
+		     , SEND_DELETE_STATUS
+		     , READ_CHECK
+		     , RECEIVE_ID
+		     , SEND_ID
+
+		  FROM NOTE
+		  JOIN MEMBER S ON(SEND_ID = USER_NO )
+		  WHERE NCONTENT LIKE '%' || ? || '%'
+            AND SEND_ID= ?
+            AND SEND_DELETE_STATUS ='N'
+		  ORDER BY NNO DESC)
+  JOIN MEMBER ON(RECEIVE_ID=USER_NO)) N)
+   WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<entry key="selectNoteWriterSendList">
+		SELECT
+       *
+  FROM(SELECT
+       ROWNUM RNUM
+     , N.*
+  FROM(SELECT 
+         NNO
+       , NTITLE
+       , NCONTENT
+       , SEND_DATE
+       , RECEIVE_DELETE_STATUS
+       , SEND_DELETE_STATUS
+       , READ_CHECK
+       , RECEIVE_ID
+       , SEND_ID
+       , NICKNAME
+  FROM(SELECT
+		       NNO
+		     , NTITLE
+		     , NCONTENT
+		     , SEND_DATE
+		     , RECEIVE_DELETE_STATUS
+		     , SEND_DELETE_STATUS
+		     , READ_CHECK
+		     , RECEIVE_ID
+		     , SEND_ID
+
+		  FROM NOTE
+		  JOIN MEMBER S ON(SEND_ID = USER_NO )
+		  WHERE NICKNAME LIKE '%' || ? || '%'
+            AND SEND_ID= ?
+            AND SEND_DELETE_STATUS ='N'
+		  ORDER BY NNO DESC)
+  JOIN MEMBER ON(RECEIVE_ID=USER_NO)) N)
+   WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	
+	
+	<entry key="readStateChange">
+		UPDATE NOTE
+		SET READ_CHECK = 'Y'
+		WHERE NNO= ?
+		  AND READ_CHECK = 'N'
+	</entry>
+	
+	<entry key="selectReceiveNote">
+		SELECT
+		       ROWNUM RNUM
+		     , N.*
+		  FROM(SELECT 
+		         NNO
+		       , NTITLE
+		       , NCONTENT
+		       , SEND_DATE
+		       , RECEIVE_DELETE_STATUS
+		       , SEND_DELETE_STATUS
+		       , READ_CHECK
+		       , RECEIVE_ID
+		       , SEND_ID
+		       , NICKNAME SEND_NICKNAME
+		       , RECEIVE_NICKNAME
+		  FROM(SELECT
+				       NNO
+				     , NTITLE
+				     , NCONTENT
+				     , SEND_DATE
+				     , RECEIVE_DELETE_STATUS
+				     , SEND_DELETE_STATUS
+				     , READ_CHECK
+				     , RECEIVE_ID
+				     , SEND_ID
+		             , NICKNAME RECEIVE_NICKNAME
+				  FROM NOTE
+				  JOIN MEMBER S ON(RECEIVE_ID = USER_NO )
+		          WHERE RECEIVE_ID= ?
+		            AND NNO = ?
+		            AND RECEIVE_DELETE_STATUS = 'N'
+				  ORDER BY NNO DESC)
+		  JOIN MEMBER ON(SEND_ID=USER_NO)) N
+	
+	</entry>
+	
+	
+	<entry key="selectSendNote">
+		SELECT
+       ROWNUM RNUM
+     , N.*
+  FROM(SELECT 
+         NNO
+       , NTITLE
+       , NCONTENT
+       , SEND_DATE
+       , RECEIVE_DELETE_STATUS
+       , SEND_DELETE_STATUS
+       , READ_CHECK
+       , RECEIVE_ID
+       , SEND_ID
+       , NICKNAME RECEIVE_NICKNAME
+       , SEND_NICKNAME
+  FROM(SELECT
+		       NNO
+		     , NTITLE
+		     , NCONTENT
+		     , SEND_DATE
+		     , RECEIVE_DELETE_STATUS
+		     , SEND_DELETE_STATUS
+		     , READ_CHECK
+		     , RECEIVE_ID
+		     , SEND_ID
+             , NICKNAME SEND_NICKNAME
+		  FROM NOTE
+		  JOIN MEMBER S ON(SEND_ID = USER_NO )
+          WHERE SEND_ID= ?
+            AND NNO = ?
+            AND SEND_DELETE_STATUS = 'N'
+		  ORDER BY NNO DESC)
+  JOIN MEMBER ON(RECEIVE_ID=USER_NO)) N
+		
+	</entry>
+	
+	<entry key="deleteReceiveNote">
+		UPDATE NOTE
+		   SET
+		       RECEIVE_DELETE_STATUS = 'Y'
+		 WHERE NNO = ?
+	</entry>
+	
+	
+	
+	<entry key="deleteSendNote">
+		UPDATE NOTE
+		   SET
+		       SEND_DELETE_STATUS = 'Y'
+		 WHERE NNO = ?
+	</entry>
+	
+	
+	<entry key="nicknameSearch">
+		SELECT
+			   COUNT(*)
+		  FROM MEMBER
+		 WHERE NICKNAME= ?
+	</entry>
+	
+	<entry key="getUserNickname">
+		SELECT
+		       NICKNAME
+		  FROM MEMBER
+		 WHERE USER_NO=?
+	</entry>
+	
+	<entry key="getReceiveUserId">
+		SELECT
+			   USER_NO
+		  FROM MEMBER
+		 WHERE NICKNAME= ?
+	
+	</entry>
+	
+	<entry key="insertNote">
+	  INSERT INTO NOTE
+	  (
+	    NNO
+	  , NTITLE
+	  , NCONTENT
+	  , SEND_DATE
+	  , RECEIVE_DELETE_STATUS
+	  , SEND_DELETE_STATUS
+	  , READ_CHECK
+	  , RECEIVE_ID
+	  , SEND_ID
+	  )
+	  VALUES
+	  (
+	    SEQ_NNO.NEXTVAL
+	  , ?
+	  , ?
+	  , SYSDATE
+	  , DEFAULT
+	  , DEFAULT
+	  , DEFAULT
+	  , ?
+	  , ?
+	  )
+	</entry>
+</properties>
+
+
+
+
